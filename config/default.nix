@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [
     ./lsp.nix
@@ -7,6 +7,14 @@
   ];
 
   config = {
+    opts = {
+      number = true;
+      relativenumber = true;
+      shiftwidth = 2;
+      spell = true;
+      spelllang = "en_us";
+    };
+
     globals.mapleader = " ";
 
     colorschemes.kanagawa.enable = true;
