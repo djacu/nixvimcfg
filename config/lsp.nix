@@ -14,7 +14,7 @@
   plugins.lsp.servers.eslint.enable = true;
   plugins.lsp.servers.html.enable = true;
   plugins.lsp.servers.jsonls.enable = true;
-  plugins.lsp.servers.nil_ls.enable = true;
+  plugins.lsp.servers.nil-ls.enable = true;
   plugins.lsp.servers.ruff.enable = true;
   plugins.lsp.servers.ruff-lsp.enable = true;
   plugins.lsp.servers.rust-analyzer.enable = true;
