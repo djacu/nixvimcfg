@@ -11,6 +11,8 @@
       number = true;
       relativenumber = true;
       shiftwidth = 2;
+      tabstop = 2;
+      expandtab = true;
       spell = true;
       spelllang = "en_us";
     };
