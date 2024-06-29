@@ -21,7 +21,7 @@ in
           let
             mappings = {
               g = {
-                name = "💾 Fugitive";
+                name = "犯 Fugitive";
                 a = [
                   "<cmd>Git add %:p<cr>"
                   "add"
