@@ -27,6 +27,9 @@ in
         };
       in
       ''
+        vim.o.timeout = true
+        vim.o.timeoutlen = 100
+
         require("which-key").register(
           ${nixvimLib.helpers.toLuaObject mappings},
           ${nixvimLib.helpers.toLuaObject opts}
