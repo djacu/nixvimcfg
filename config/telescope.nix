@@ -14,6 +14,7 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        plugins.web-devicons.enable = true;
 
         plugins.telescope.enable = true;
         plugins.telescope.extensions.file-browser.enable = true;
@@ -38,7 +39,6 @@ in
         plugins.telescope.extensions.media-files.dependencies.pdftoppm.enable = true;
 
         extraPackages = with pkgs; [ fd ];
-
       }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
@@ -84,7 +84,6 @@ in
               ${nixvimLib.helpers.toLuaObject opts}
             )
           '';
-
       })
     ]
   );

@@ -12,7 +12,7 @@ in
 
   config = lib.mkIf cfg.enable {
     plugins.which-key.enable = true;
-    plugins.which-key.showKeys = true;
+    plugins.which-key.settings.show_keys = true;
 
     extraConfigLua =
       let
@@ -35,6 +35,5 @@ in
           ${nixvimLib.helpers.toLuaObject opts}
         )
       '';
-
   };
 }

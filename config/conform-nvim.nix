@@ -25,7 +25,7 @@ in
           in
           {
             enable = true;
-            formattersByFt = {
+            settings.formatters_by_ft = {
               css = pretty;
               html = pretty;
               javascript = pretty;
@@ -50,7 +50,6 @@ in
           shfmt
           typstfmt
         ];
-
       }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
@@ -76,9 +75,7 @@ in
               ${nixvimLib.helpers.toLuaObject opts}
             )
           '';
-
       })
-
     ]
   );
 }

@@ -14,18 +14,17 @@ in
     plugins.lsp.servers.eslint.enable = true;
     plugins.lsp.servers.html.enable = true;
     plugins.lsp.servers.jsonls.enable = true;
-    plugins.lsp.servers.nil-ls.enable = false;
+    plugins.lsp.servers.nil_ls.enable = false;
     plugins.lsp.servers.nixd.enable = true;
     plugins.lsp.servers.ruff.enable = true;
-    plugins.lsp.servers.ruff-lsp.enable = true;
-    plugins.lsp.servers.rust-analyzer.enable = true;
-    plugins.lsp.servers.rust-analyzer.installCargo = true;
-    plugins.lsp.servers.rust-analyzer.installRustc = true;
+    plugins.lsp.servers.ruff_lsp.enable = true;
+    plugins.lsp.servers.rust_analyzer.enable = true;
+    plugins.lsp.servers.rust_analyzer.installCargo = true;
+    plugins.lsp.servers.rust_analyzer.installRustc = true;
     plugins.lsp.servers.tailwindcss.enable = true;
     plugins.lsp.servers.texlab.enable = true;
-    plugins.lsp.servers.typos-lsp.enable = true;
-    plugins.lsp.servers.typst-lsp.enable = true;
+    plugins.lsp.servers.typos_lsp.enable = true;
+    plugins.lsp.servers.typst_lsp.enable = true;
     plugins.lsp.servers.yamlls.enable = true;
-
   };
 }
