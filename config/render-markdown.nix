@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  nixvimLib,
   ...
 }:
 let
@@ -15,39 +14,23 @@ in
       { plugins.render-markdown.enable = true; }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
-
-        extraConfigLua =
-          let
-            mappings = {
-
-              m = {
-
-                name = "マ Markdown";
-
-                e = [
-                  "<cmd>RenderMarkdown enable<cr>"
-                  "Render Markdown Enable"
-                ];
-
-                d = [
-                  "<cmd>RenderMarkdown disable<cr>"
-                  "Render Markdown Disable"
-                ];
-              };
-            };
-            opts = {
-              prefix = "<leader>";
-            };
-          in
-          ''
-            require("which-key").register(
-              ${nixvimLib.helpers.toLuaObject mappings},
-              ${nixvimLib.helpers.toLuaObject opts}
-            )
-          '';
-
+        plugins.which-key.settings.spec = [
+          {
+            __unkeyed-1 = "<leader>m";
+            group = "マ Markdown";
+          }
+          {
+            __unkeyed-1 = "<leader>me";
+            __unkeyed-2 = "<cmd>RenderMarkdown enable<cr>";
+            desc = "Render Enable";
+          }
+          {
+            __unkeyed-1 = "<leader>md";
+            __unkeyed-2 = "<cmd>RenderMarkdown disable<cr>";
+            desc = "Render Disable";
+          }
+        ];
       })
-
     ]
   );
 }

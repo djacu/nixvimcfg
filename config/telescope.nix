@@ -2,7 +2,6 @@
   lib,
   config,
   pkgs,
-  nixvimLib,
   ...
 }:
 let
@@ -14,6 +13,8 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        plugins.mini.enable = true;
+        # plugins.mini.modules.icons = true;
         plugins.web-devicons.enable = true;
 
         plugins.telescope.enable = true;
@@ -42,48 +43,42 @@ in
       }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
-
-        extraConfigLua =
-          let
-            mappings = {
-              f = {
-                name = " Telescope";
-                b = [
-                  "<cmd>Telescope file_browser<cr>"
-                  "File Browser"
-                ];
-                f = [
-                  "<cmd>Telescope find_files<cr>"
-                  "Find File"
-                ];
-                l = [
-                  "<cmd>Telescope live_grep<cr>"
-                  "Live Grep"
-                ];
-                m = [
-                  "<cmd>Telescope media_files<cr>"
-                  "Open Media File"
-                ];
-                r = [
-                  "<cmd>Telescope oldfiles<cr>"
-                  "Open Recent File"
-                ];
-                t = [
-                  "<cmd>Telescope<cr>"
-                  "Telescope"
-                ];
-              };
-            };
-            opts = {
-              prefix = "<leader>";
-            };
-          in
-          ''
-            require("which-key").register(
-              ${nixvimLib.helpers.toLuaObject mappings},
-              ${nixvimLib.helpers.toLuaObject opts}
-            )
-          '';
+        plugins.which-key.settings.spec = [
+          {
+            __unkeyed-1 = "<leader>f";
+            group = " Telescope";
+          }
+          {
+            __unkeyed-1 = "<leader>fb";
+            __unkeyed-2 = "<cmd>Telescope file_browser<cr>";
+            desc = "File Browser";
+          }
+          {
+            __unkeyed-1 = "<leader>ff";
+            __unkeyed-2 = "<cmd>Telescope find_files<cr>";
+            desc = "Find File";
+          }
+          {
+            __unkeyed-1 = "<leader>fl";
+            __unkeyed-2 = "<cmd>Telescope live_grep<cr>";
+            desc = "Live Grep";
+          }
+          {
+            __unkeyed-1 = "<leader>fm";
+            __unkeyed-2 = "<cmd>Telescope media_files<cr>";
+            desc = "Open Media File";
+          }
+          {
+            __unkeyed-1 = "<leader>fr";
+            __unkeyed-2 = "<cmd>Telescope oldfiles<cr>";
+            desc = "Open Recent File";
+          }
+          {
+            __unkeyed-1 = "<leader>ft";
+            __unkeyed-2 = "<cmd>Telescope<cr>";
+            desc = "Telescope";
+          }
+        ];
       })
     ]
   );

@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  nixvimLib,
   ...
 }:
 let
@@ -13,27 +12,17 @@ in
   config = lib.mkIf cfg.enable {
     plugins.which-key.enable = true;
     plugins.which-key.settings.show_keys = true;
+    plugins.which-key.settings.spec = [
+      {
+        __unkeyed-1 = "<leader>w";
+        __unkeyed-2 = "<cmd>WhichKey<cr>";
+        desc = "WhichKey?!";
+      }
+    ];
 
-    extraConfigLua =
-      let
-        mappings = {
-          w = [
-            "<cmd>WhichKey<cr>"
-            " WhichKey?!"
-          ];
-        };
-        opts = {
-          prefix = "<leader>";
-        };
-      in
-      ''
-        vim.o.timeout = true
-        vim.o.timeoutlen = 100
-
-        require("which-key").register(
-          ${nixvimLib.helpers.toLuaObject mappings},
-          ${nixvimLib.helpers.toLuaObject opts}
-        )
-      '';
+    extraConfigLua = ''
+      vim.o.timeout = true
+      vim.o.timeoutlen = 100
+    '';
   };
 }

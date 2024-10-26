@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  nixvimLib,
   ...
 }:
 let
@@ -26,6 +25,12 @@ in
 
       {
 
+        plugins.treesitter.settings.highlight.enable = true;
+
+      }
+
+      {
+
         plugins.treesitter-context.enable = true;
         plugins.treesitter-context.settings.enable = false;
         plugins.treesitter-context.settings.trim_scope = "outer";
@@ -43,32 +48,17 @@ in
       }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
-
-        extraConfigLua =
-          let
-            mappings = {
-
-              t = {
-
-                name = "木 Treesitter";
-
-                c = [
-                  "<cmd>TSContextToggle<cr>"
-                  "Context Toggle"
-                ];
-              };
-            };
-            opts = {
-              prefix = "<leader>";
-            };
-          in
-          ''
-            require("which-key").register(
-              ${nixvimLib.helpers.toLuaObject mappings},
-              ${nixvimLib.helpers.toLuaObject opts}
-            )
-          '';
-
+        plugins.which-key.settings.spec = [
+          {
+            __unkeyed-1 = "<leader>t";
+            group = "木 Treesitter";
+          }
+          {
+            __unkeyed-1 = "<leader>tc";
+            __unkeyed-2 = "<cmd>TSContextToggle<cr>";
+            desc = "Context Toggle";
+          }
+        ];
       })
     ]
   );
