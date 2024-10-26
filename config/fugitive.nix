@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  nixvimLib,
   ...
 }:
 let
@@ -16,57 +15,52 @@ in
       { plugins.fugitive.enable = true; }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
-
-        extraConfigLua =
-          let
-            mappings = {
-              g = {
-                name = "犯 Fugitive";
-                a = [
-                  "<cmd>Git add %:p<cr>"
-                  "add"
-                ];
-                b = [
-                  "<cmd>Git blame<cr>"
-                  "blame"
-                ];
-                c = [
-                  "<cmd>Git commit<cr>"
-                  "commit"
-                ];
-                d = [
-                  "<cmd>Git diff<cr>"
-                  "diff"
-                ];
-                g = [
-                  "<cmd>Git<cr>"
-                  ":Git"
-                ];
-                l = [
-                  "<cmd>Git log<cr>"
-                  "log"
-                ];
-                pl = [
-                  "<cmd>Git pull<cr>"
-                  "pull"
-                ];
-                ps = [
-                  "<cmd>Git push<cr>"
-                  "push"
-                ];
-              };
-            };
-            opts = {
-              prefix = "<leader>";
-            };
-          in
-          ''
-            require("which-key").register(
-              ${nixvimLib.helpers.toLuaObject mappings},
-              ${nixvimLib.helpers.toLuaObject opts}
-            )
-          '';
-
+        plugins.which-key.settings.spec = [
+          {
+            __unkeyed-1 = "<leader>g";
+            group = "犯 Fugitive";
+          }
+          {
+            __unkeyed-1 = "<leader>ga";
+            __unkeyed-2 = "<cmd>Git add %:p<cr>";
+            desc = "add";
+          }
+          {
+            __unkeyed-1 = "<leader>gb";
+            __unkeyed-2 = "<cmd>Git blame<cr>";
+            desc = "blame";
+          }
+          {
+            __unkeyed-1 = "<leader>gc";
+            __unkeyed-2 = "<cmd>Git commit<cr>";
+            desc = "commit";
+          }
+          {
+            __unkeyed-1 = "<leader>gd";
+            __unkeyed-2 = "<cmd>Git diff<cr>";
+            desc = "diff";
+          }
+          {
+            __unkeyed-1 = "<leader>gg";
+            __unkeyed-2 = "<cmd>Git<cr>";
+            desc = ":Git";
+          }
+          {
+            __unkeyed-1 = "<leader>gl";
+            __unkeyed-2 = "<cmd>Git log<cr>";
+            desc = "log";
+          }
+          {
+            __unkeyed-1 = "<leader>gpl";
+            __unkeyed-2 = "<cmd>Git pull<cr>";
+            desc = "pull";
+          }
+          {
+            __unkeyed-1 = "<leader>gps";
+            __unkeyed-2 = "<cmd>Git push<cr>";
+            desc = "push";
+          }
+        ];
       })
     ]
   );

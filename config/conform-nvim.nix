@@ -2,7 +2,6 @@
   lib,
   config,
   pkgs,
-  nixvimLib,
   ...
 }:
 let
@@ -53,28 +52,17 @@ in
       }
 
       (lib.mkIf config.nixvimcfg.which-key.enable {
-
-        extraConfigLua =
-          let
-            mappings = {
-              l = {
-                name = " LSP";
-                m = [
-                  "<cmd>lua require(\"conform\").format()<cr>"
-                  "Format"
-                ];
-              };
-            };
-            opts = {
-              prefix = "<leader>";
-            };
-          in
-          ''
-            require("which-key").register(
-              ${nixvimLib.helpers.toLuaObject mappings},
-              ${nixvimLib.helpers.toLuaObject opts}
-            )
-          '';
+        plugins.which-key.settings.spec = [
+          {
+            __unkeyed-1 = "<leader>l";
+            group = " LSP";
+          }
+          {
+            __unkeyed-1 = "<leader>lm";
+            __unkeyed-2 = "<cmd>lua require(\"conform\").format()<cr>";
+            desc = "Format";
+          }
+        ];
       })
     ]
   );
