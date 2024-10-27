@@ -12,6 +12,8 @@
     checks = import ./checks inputs;
     formatter = import ./formatter inputs;
     legacyPackages = import ./legacy-packages inputs;
+    nixvimModules = import ./nixvim-modules inputs;
+    nixvimConfigurations = import ./nixvim-configurations inputs;
     overlays = import ./overlays inputs;
     packages = import ./packages inputs;
   };

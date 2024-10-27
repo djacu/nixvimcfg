@@ -9,6 +9,6 @@ inputs.nixpkgs.lib.genAttrs
   (system: {
     default = inputs.nixvim.lib.${system}.check.mkTestDerivationFromNixvimModule {
       pkgs = inputs.self.legacyPackages.${system};
-      module = import ../config;
+      module = inputs.self.nixvimConfigurations.default;
     };
   })
