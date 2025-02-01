@@ -31,7 +31,11 @@ in
               json = [ "prettier" ];
               markdown = [ "prettier" ];
               nix = [ "nixfmt" ];
-              python = [ "ruff" ];
+              python = [
+                "ruff_fix"
+                "ruff_format"
+                "ruff_organize_imports"
+              ];
               rust = [ "rustfmt" ];
               sh = [ "shfmt" ];
               typescript = pretty;
