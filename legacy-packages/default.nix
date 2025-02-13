@@ -12,7 +12,6 @@ inputs.nixpkgs.lib.genAttrs
       inherit system;
       overlays = [
         inputs.nixvim.overlays.default
-        inputs.self.overlays.bounds-check-patch
         inputs.self.overlays.nixvimcfg
       ];
     }
