@@ -25,6 +25,7 @@ in
     plugins.lsp.servers.rust_analyzer.installCargo = true;
     plugins.lsp.servers.rust_analyzer.installRustc = true;
     plugins.lsp.servers.tailwindcss.enable = true;
+    plugins.lsp.servers.taplo.enable = true;
     plugins.lsp.servers.texlab.enable = true;
     plugins.lsp.servers.typos_lsp.enable = true;
     plugins.lsp.servers.tinymist.enable = true;
