@@ -2,21 +2,20 @@
   description = "A nixvim configuration";
 
   inputs = {
+    flake-parts.follows = "nixvim/flake-parts";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixvim.inputs.devshell.follows = "";
-    nixvim.inputs.flake-compat.follows = "";
-    nixvim.inputs.git-hooks.follows = "";
-    nixvim.inputs.home-manager.follows = "";
-    nixvim.inputs.nix-darwin.follows = "";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.inputs.nuschtosSearch.follows = "";
-    nixvim.inputs.treefmt-nix.follows = "";
     nixvim.url = "github:nix-community/nixvim";
+    systems.follows = "nixvim/systems";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = inputs: {
     checks = import ./checks inputs;
     formatter = import ./formatter inputs;
+    formatterModule = import ./formatter-module inputs;
     legacyPackages = import ./legacy-packages inputs;
     nixvimModules = import ./nixvim-modules inputs;
     nixvimConfigurations = import ./nixvim-configurations inputs;
