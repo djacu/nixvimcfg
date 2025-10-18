@@ -21,9 +21,12 @@ in
     plugins.lsp.servers.nil_ls.enable = false;
     plugins.lsp.servers.nixd.enable = true;
     plugins.lsp.servers.ruff.enable = true;
+    lsp.servers.rust_analyzer.enable = true;
+    lsp.servers.rust_analyzer.packageFallback = true;
     plugins.lsp.servers.rust_analyzer.enable = true;
     plugins.lsp.servers.rust_analyzer.installCargo = true;
     plugins.lsp.servers.rust_analyzer.installRustc = true;
+    plugins.lsp.servers.rust_analyzer.installRustfmt = true;
     plugins.lsp.servers.tailwindcss.enable = true;
     plugins.lsp.servers.taplo.enable = true;
     plugins.lsp.servers.texlab.enable = true;
