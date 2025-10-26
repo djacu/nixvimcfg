@@ -3,15 +3,7 @@ inputs: {
     { ... }:
     {
       imports = [
-        ../nixvim-modules/cmp.nix
-        ../nixvim-modules/conform-nvim.nix
-        ../nixvim-modules/coq-nvim.nix
-        ../nixvim-modules/fugitive.nix
-        ../nixvim-modules/lsp.nix
-        ../nixvim-modules/render-markdown.nix
-        ../nixvim-modules/telescope.nix
-        ../nixvim-modules/treesitter.nix
-        ../nixvim-modules/which-key.nix
+        inputs.self.nixvimModules.default
       ];
 
       config = {
