@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -22,6 +23,12 @@ in
     plugins.lsp.servers.eslint.enable = true;
 
     plugins.lsp.servers.html.enable = true;
+
+    plugins.lsp.servers.gopls.enable = true;
+    plugins.lsp.servers.golangci_lint_ls.enable = true;
+    extraPackages = [
+      pkgs.golangci-lint
+    ];
 
     plugins.lsp.servers.jsonls.enable = true;
 
