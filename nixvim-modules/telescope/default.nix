@@ -32,12 +32,13 @@ in
           "svg"
         ];
         plugins.telescope.extensions.media-files.settings.find_cmd = "fd";
-        plugins.telescope.extensions.media-files.dependencies.chafa.enable = true;
-        plugins.telescope.extensions.media-files.dependencies.epub-thumbnailer.enable = true;
-        plugins.telescope.extensions.media-files.dependencies.ffmpegthumbnailer.enable = true;
-        plugins.telescope.extensions.media-files.dependencies.fontpreview.enable = true;
-        plugins.telescope.extensions.media-files.dependencies.imageMagick.enable = true;
-        plugins.telescope.extensions.media-files.dependencies.pdftoppm.enable = true;
+
+        dependencies.poppler-utils.enable = true;
+        dependencies.imagemagick.enable = true;
+        dependencies.fontpreview.enable = true;
+        dependencies.ffmpegthumbnailer.enable = true;
+        dependencies.epub-thumbnailer.enable = true;
+        dependencies.chafa.enable = true;
 
         extraPackages = with pkgs; [ fd ];
       }
