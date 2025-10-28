@@ -23,7 +23,7 @@ inputs: {
         colorschemes.kanagawa.enable = true;
 
         plugins.bufferline.enable = true;
-        plugins.chadtree.enable = true;
+        plugins.chadtree.enable = false;
         plugins.comment.enable = true;
         plugins.lightline.enable = true;
         plugins.nvim-autopairs.enable = true;
