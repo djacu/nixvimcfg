@@ -3,8 +3,7 @@
 
   inputs = {
     flake-parts.follows = "nixvim/flake-parts";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.follows = "nixvim/nixpkgs";
     nixvim.inputs.nuschtosSearch.follows = "";
     nixvim.url = "github:nix-community/nixvim";
     systems.follows = "nixvim/systems";
