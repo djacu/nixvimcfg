@@ -29,6 +29,7 @@ in
               html = pretty;
               javascript = pretty;
               json = [ "prettier" ];
+              go = [ "gofmt" ];
               markdown = [ "prettier" ];
               nix = [ "nixfmt" ];
               python = [
@@ -42,6 +43,7 @@ in
               typst = [ "typstfmt" ];
               yaml = pretty;
             };
+            settings.notify_no_formatters = true;
           };
 
         extraPackages = with pkgs; [
