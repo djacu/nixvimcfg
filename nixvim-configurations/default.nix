@@ -26,7 +26,7 @@ inputs: {
         # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.editing.enable = true;
         nixvimcfg.files.enable = true;
-        nixvimcfg.fugitive.enable = true;
+        nixvimcfg.git.enable = true;
         nixvimcfg.lsp.enable = true;
         nixvimcfg.navigation.enable = true;
         nixvimcfg.picker.enable = true;
