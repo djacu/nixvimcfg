@@ -15,17 +15,12 @@ in
       {
 
         plugins.treesitter.enable = true;
-        plugins.treesitter-refactor.enable = true;
-        plugins.treesitter-refactor.highlightCurrentScope.enable = false;
-        plugins.treesitter-refactor.highlightDefinitions.enable = true;
-        plugins.treesitter-refactor.navigation.enable = true;
-        plugins.treesitter-refactor.smartRename.enable = true;
 
       }
 
       {
 
-        plugins.treesitter.settings.highlight.enable = true;
+        plugins.treesitter.highlight.enable = true;
 
       }
 
@@ -39,7 +34,7 @@ in
 
       {
 
-        plugins.treesitter.folding = true;
+        plugins.treesitter.folding.enable = true;
 
         extraConfigLua = ''
           vim.opt.foldenable = false

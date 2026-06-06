@@ -49,11 +49,11 @@ in
         extraPackages = with pkgs; [
           #ruff
           nixfmt-rfc-style
-          nodePackages.prettier
+          prettier
           prettierd
           rustfmt
           shfmt
-          typstfmt
+          typstyle
         ];
       }
 

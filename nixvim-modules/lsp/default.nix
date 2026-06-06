@@ -38,8 +38,6 @@ in
 
     plugins.lsp.servers.ruff.enable = true;
 
-    lsp.servers.rust_analyzer.enable = true;
-    lsp.servers.rust_analyzer.packageFallback = true;
     plugins.lsp.servers.rust_analyzer.enable = true;
     plugins.lsp.servers.rust_analyzer.installCargo = true;
     plugins.lsp.servers.rust_analyzer.installRustc = true;
@@ -56,6 +54,18 @@ in
     plugins.lsp.servers.tinymist.enable = true;
 
     plugins.lsp.servers.yamlls.enable = true;
+
+    # === <leader>l LSP keymap leaves ===
+    # WHY: lsp module owns <leader>l prefix; smartRename from treesitter-refactor
+    # is now provided by vim.lsp.buf.rename, bound here so the keymap doesn't dangle.
+    keymaps = [
+      {
+        mode = "n";
+        key = "<leader>lr";
+        action.__raw = "function() vim.lsp.buf.rename() end";
+        options.desc = "LSP rename";
+      }
+    ];
 
   };
 }
