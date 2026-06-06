@@ -30,7 +30,6 @@ inputs: {
         plugins.vim-surround.enable = true;
 
         nixvimcfg.cmp.enable = true;
-        nixvimcfg.conform-nvim.enable = true;
         # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.fugitive.enable = true;
         nixvimcfg.lsp.enable = true;

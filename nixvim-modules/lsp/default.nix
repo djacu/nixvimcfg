@@ -76,6 +76,67 @@ in
       # WHY: typos catches misspellings in identifiers/comments.
       { plugins.lsp.servers.typos_lsp.enable = true; }
 
+      # === Haskell ===
+      # WHY: user is starting Haskell. hls is the only real option.
+      # installGhc bundles the compiler so the editor is self-contained
+      # (mirrors the rust-analyzer pattern above).
+      {
+        plugins.lsp.servers.hls.enable = true;
+        plugins.lsp.servers.hls.installGhc = true;
+      }
+
+      # === CMake ===
+      # WHY: occasional reading of CMake files. neocmake is the modern
+      # successor to the older cmake LSP.
+      { plugins.lsp.servers.neocmake.enable = true; }
+
+      # === Ansible ===
+      # WHY: occasional playbook editing. Catches YAML schema errors.
+      # Nixvim doesn't auto-wire a package for ansiblels; supply it
+      # from nixpkgs.
+      {
+        plugins.lsp.servers.ansiblels.enable = true;
+        plugins.lsp.servers.ansiblels.package = pkgs.ansible-language-server;
+      }
+
+      # === TypeScript / JavaScript ===
+      # WHY: gap in current setup — eslint LSP is a linter, not a
+      # navigation/hover language server. ts_ls covers plain .ts/.tsx/.js.
+      { plugins.lsp.servers.ts_ls.enable = true; }
+
+      # === Lua ===
+      # WHY: lua_ls + lazydev for completion when editing inline Lua.
+      # Lazydev only fires on lua filetypes (not on inline Lua inside
+      # .nix files); extract nontrivial Lua to .lua files via
+      # lib.fileContents to get completion there.
+      {
+        plugins.lsp.servers.lua_ls.enable = true;
+        plugins.lazydev.enable = true;
+      }
+
+      # === Markdown ===
+      # WHY: link/heading completion for markdown files. Pairs with
+      # render-markdown for the visual side.
+      { plugins.lsp.servers.marksman.enable = true; }
+
+      # === English grammar (prose) ===
+      # WHY: harper_ls catches grammar errors in prose. SpellCheck rule
+      # narrowed to markdown/text/gitcommit filetypes so it doesn't
+      # flag code identifiers. SentenceCapitalization disabled to
+      # reduce noise on terse docs.
+      {
+        plugins.lsp.servers.harper_ls.enable = true;
+        plugins.lsp.servers.harper_ls.settings = {
+          "harper-ls" = {
+            linters.SentenceCapitalization = false;
+            fileDictPath = null;
+          };
+          # SpellCheck only runs on these filetypes; harper still
+          # parses code files but skips spell-checking identifiers.
+          filetypes = [ "markdown" "text" "gitcommit" ];
+        };
+      }
+
       # === <leader>l LSP keymap leaves ===
       # WHY: lsp module owns <leader>l prefix; smartRename from
       # treesitter-refactor is now provided by vim.lsp.buf.rename.
