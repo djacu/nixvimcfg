@@ -35,7 +35,7 @@ inputs: {
         nixvimcfg.fugitive.enable = true;
         nixvimcfg.lsp.enable = true;
         nixvimcfg.render-markdown.enable = true;
-        nixvimcfg.telescope.enable = true;
+        nixvimcfg.picker.enable = true;
         nixvimcfg.treesitter.enable = true;
         nixvimcfg.which-key.enable = true;
       };
