@@ -52,7 +52,6 @@ in
           { __unkeyed-1 = "<leader>b"; group = " Buffer"; }
           { __unkeyed-1 = "<leader>c"; group = " Code"; }
           { __unkeyed-1 = "<leader>d"; group = " Debug"; }
-          { __unkeyed-1 = "<leader>e"; group = " Explore"; }
           { __unkeyed-1 = "<leader>f"; group = " Find"; }
           { __unkeyed-1 = "<leader>g"; group = " Git"; }
           { __unkeyed-1 = "<leader>gh"; group = " Hunks"; }
