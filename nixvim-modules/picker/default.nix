@@ -20,16 +20,13 @@ in
         extraPackages = with pkgs; [ fd ];
       }
 
-      # === mini.nvim + web-devicons for icons ===
-      # WHY: telescope (and bufferline) expect nvim-web-devicons. mini.nvim
-      # is enabled here as a placeholder; phase 7 (ui) will switch to
-      # mini.icons with mockDevIcons. For now we keep web-devicons
-      # explicit so the strict deprecation check passes without changing
-      # the icon set in use.
-      {
-        plugins.mini.enable = true;
-        plugins.web-devicons.enable = true;
-      }
+      # === icon provider ===
+      # WHY: telescope and other plugins look up an icon provider via
+      # `require('nvim-web-devicons')`. mini.icons (configured in the
+      # ui module) registers a shim under that name via
+      # `mock_nvim_web_devicons = true`, and the ui module force-
+      # disables plugins.web-devicons to prevent double-loading.
+      { plugins.mini.enable = true; }
 
       # === extension: file-browser ===
       # WHY: file ops from inside the picker (rename/delete/create).
