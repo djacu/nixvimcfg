@@ -126,14 +126,14 @@ in
       # reduce noise on terse docs.
       {
         plugins.lsp.servers.harper_ls.enable = true;
+        # SpellCheck only attaches harper to these filetypes; code
+        # files won't be touched so identifiers aren't flagged.
+        plugins.lsp.servers.harper_ls.filetypes = [ "markdown" "text" "gitcommit" ];
         plugins.lsp.servers.harper_ls.settings = {
           "harper-ls" = {
             linters.SentenceCapitalization = false;
             fileDictPath = null;
           };
-          # SpellCheck only runs on these filetypes; harper still
-          # parses code files but skips spell-checking identifiers.
-          filetypes = [ "markdown" "text" "gitcommit" ];
         };
       }
 
