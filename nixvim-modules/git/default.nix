@@ -45,7 +45,8 @@ in
           { __unkeyed-1 = "<leader>gp"; __unkeyed-2 = "<cmd>Neogit push<cr>"; desc = "Push"; }
           { __unkeyed-1 = "<leader>gP"; __unkeyed-2 = "<cmd>Neogit pull<cr>"; desc = "Pull"; }
           { __unkeyed-1 = "<leader>gf"; __unkeyed-2 = "<cmd>Neogit fetch<cr>"; desc = "Fetch"; }
-          { __unkeyed-1 = "<leader>gb"; __unkeyed-2 = "<cmd>Neogit branch<cr>"; desc = "Branch"; }
+          { __unkeyed-1 = "<leader>gb"; __unkeyed-2 = "<cmd>Gitsigns blame<cr>"; desc = "Blame (buffer)"; }
+          { __unkeyed-1 = "<leader>gB"; __unkeyed-2 = "<cmd>Neogit branch<cr>"; desc = "Branch"; }
           { __unkeyed-1 = "<leader>gs"; __unkeyed-2 = "<cmd>Neogit stash<cr>"; desc = "Stash"; }
           { __unkeyed-1 = "<leader>gm"; __unkeyed-2 = "<cmd>Neogit merge<cr>"; desc = "Merge"; }
           { __unkeyed-1 = "<leader>gr"; __unkeyed-2 = "<cmd>Neogit rebase<cr>"; desc = "Rebase"; }
@@ -62,8 +63,9 @@ in
           { __unkeyed-1 = "<leader>ghp"; __unkeyed-2 = "<cmd>Gitsigns preview_hunk<cr>"; desc = "Preview hunk"; }
           { __unkeyed-1 = "<leader>ghu"; __unkeyed-2 = "<cmd>Gitsigns undo_stage_hunk<cr>"; desc = "Undo stage hunk"; }
           { __unkeyed-1 = "<leader>ghd"; __unkeyed-2 = "<cmd>Gitsigns diffthis<cr>"; desc = "Diff vs index"; }
-          # blame
-          { __unkeyed-1 = "<leader>gB"; __unkeyed-2 = "<cmd>Gitsigns toggle_current_line_blame<cr>"; desc = "Toggle line blame"; }
+          # inline blame toggle (under Toggle group; the prime <leader>gb
+          # opens the full blame buffer above)
+          { __unkeyed-1 = "<leader>ob"; __unkeyed-2 = "<cmd>Gitsigns toggle_current_line_blame<cr>"; desc = "Inline git blame"; }
         ];
       })
 
