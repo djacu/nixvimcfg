@@ -22,11 +22,10 @@ inputs: {
 
         colorschemes.kanagawa.enable = true;
 
-        plugins.chadtree.enable = false;
-
         nixvimcfg.completion.enable = true;
         # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.editing.enable = true;
+        nixvimcfg.files.enable = true;
         nixvimcfg.fugitive.enable = true;
         nixvimcfg.lsp.enable = true;
         nixvimcfg.navigation.enable = true;
