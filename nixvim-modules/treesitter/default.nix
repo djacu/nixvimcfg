@@ -193,9 +193,9 @@ in
       (lib.mkIf config.nixvimcfg.which-key.enable {
         plugins.which-key.settings.spec = [
           {
-            __unkeyed-1 = "<leader>tc";
+            __unkeyed-1 = "<leader>oc";
             __unkeyed-2 = "<cmd>TSContextToggle<cr>";
-            desc = "Context Toggle";
+            desc = "TS Context Toggle";
           }
         ];
       })
