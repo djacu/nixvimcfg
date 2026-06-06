@@ -28,7 +28,7 @@ in
       {
         plugins.blink-cmp.enable = true;
         plugins.blink-cmp.settings = {
-          keymap.preset = "default";
+          keymap.preset = "enter";
           completion.documentation.auto_show = true;
           completion.documentation.auto_show_delay_ms = 200;
         };
@@ -52,12 +52,6 @@ in
           module = "lazydev.integrations.blink";
           score_offset = 100;
         };
-      }
-
-      # === cmdline completion ===
-      # WHY: completion in : (command) and / (search) modes.
-      {
-        plugins.blink-cmp.settings.cmdline.enabled = true;
       }
 
     ]
