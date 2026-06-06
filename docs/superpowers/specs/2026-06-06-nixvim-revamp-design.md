@@ -22,7 +22,7 @@ Three threads handled as one design:
 - **No lazygit binary on this user's system** — `snacks.lazygit` is excluded.
 - **harpoon2 via the first-class `plugins.harpoon` module** with `package` overridden to the harpoon2 branch (nixpkgs ships `vimPlugins.harpoon2`).
 - **`mini.tabline` replaces `bufferline.nvim`** for mini-suite consistency. (bufferline.nvim is not archived — last release v4.9.1 Jan 2025 — but `mini.tabline` matches the rest of the mini suite the user is adopting.)
-- **`neogit` added alongside `fugitive`** (not replacing).
+- **`neogit` fully replaces `fugitive`.** Verified during spec review: every fugitive feature the user relied on has a direct replacement (neogit popups for status/commit/push/pull/log/branch/rebase/stash/merge/cherry-pick/revert/reset; gitsigns for blame; diffview for diff browser + file history; snacks.gitbrowse for `:GBrowse`). The only loss is `:Git <anything>` raw passthrough — acceptable since for rare arbitrary git, running it in `:terminal` or an external shell is fine.
 
 ## Architecture
 
@@ -34,7 +34,7 @@ nixvim-modules/
 ├── dap/                    # nvim-dap + adapters
 ├── editing/                # mini editing primitives + guess-indent + nvim-ts-autotag
 ├── files/                  # oil.nvim
-├── git/                    # gitsigns + diffview + fugitive + neogit
+├── git/                    # gitsigns + diffview + neogit (replaces fugitive)
 ├── lsp/                    # LSP servers + lazydev
 ├── navigation/             # harpoon2 + flash + aerial + grug-far
 ├── neotest/                # neotest + adapters
@@ -264,29 +264,52 @@ The design accepts mini's defaults. If the user reports friction during phase 6,
 
 ### Git module
 
-- **`gitsigns`** — gutter signs + hunk staging + inline blame.
-- **`diffview.nvim`** — full-screen diff browser.
-- **`fugitive`** kept — `:G` command surface.
-- **`neogit`** added — Magit-style interactive porcelain.
+Four plugins, each owning a conceptual slice:
 
-**Keymap layout** (resolves `<leader>g` collisions between fugitive and diffview that the existing config would create):
+- **`neogit`** — Magit-style interactive porcelain. Replaces fugitive entirely.
+- **`gitsigns`** — gutter signs, inline hunk staging, inline blame.
+- **`diffview.nvim`** — full-screen diff browser + file history.
+- **`snacks.gitbrowse`** — "open in GitHub" (replaces `:GBrowse`).
+
+**Fugitive is REMOVED.** Every fugitive feature has a replacement (see Constraints section). The only loss is `:Git <anything>` raw passthrough — for rare arbitrary git, use `:terminal` or external shell.
+
+**Keymap layout** — comprehensive, organized so each plugin owns its slice:
 
 | Key | Action | Plugin |
 |---|---|---|
-| `<leader>ga` | git add current file | fugitive (`:Git add %:p`) |
-| `<leader>gb` | git blame | fugitive |
-| `<leader>gc` | git commit | fugitive |
-| `<leader>gd` | git diff (single-file view) | fugitive |
-| `<leader>gg` | open `:Git` status | fugitive |
-| `<leader>gl` | git log | fugitive |
-| `<leader>gpl` / `<leader>gps` | pull / push | fugitive |
-| `<leader>gv` | open diffview | diffview |
-| `<leader>gvf` | diffview file history | diffview |
-| `<leader>gn` | open neogit | neogit |
-| `<leader>gh{s,r,p,u}` | hunk stage / reset / preview / undo | gitsigns |
-| `<leader>go` | open current line in GitHub | snacks.gitbrowse |
+| `<leader>gg` | open neogit status | neogit |
+| `<leader>gc` | commit popup | neogit |
+| `<leader>gC` | commit --amend | neogit |
+| `<leader>gp` | push popup | neogit |
+| `<leader>gP` | pull popup | neogit |
+| `<leader>gf` | fetch popup | neogit |
+| `<leader>gb` | branch popup (checkout/create/delete/rename) | neogit |
+| `<leader>gB` | toggle inline blame on current line | gitsigns |
+| `<leader>gs` | stash popup | neogit |
+| `<leader>gm` | merge popup | neogit |
+| `<leader>gr` | rebase popup | neogit |
+| `<leader>gx` | cherry-pick popup | neogit |
+| `<leader>gz` | reset popup | neogit |
+| `<leader>gl` | log popup | neogit |
+| `<leader>gv` | diffview open | diffview |
+| `<leader>gV` | diffview close | diffview |
+| `<leader>gw` | diffview file history (replaces `:Gedit HEAD~N:%`) | diffview |
+| `<leader>gh` | (group) hunk ops | gitsigns |
+| `<leader>ghs` | stage hunk | gitsigns |
+| `<leader>ghr` | reset hunk | gitsigns |
+| `<leader>ghp` | preview hunk | gitsigns |
+| `<leader>ghu` | undo stage hunk | gitsigns |
+| `<leader>ghd` | diff against index | gitsigns |
+| `<leader>gho` | open in GitHub (snacks.gitbrowse) | snacks |
 
-Diffview moves to `<leader>gv` to avoid collision with fugitive's `<leader>gd`. Gitsigns hunks live under `<leader>gh`. All other fugitive bindings retained verbatim from the existing config.
+24 bindings total, no collisions. `<leader>gh` is the gitsigns hunks group prefix.
+
+**Migration of existing fugitive keymaps** (current `<leader>ga`/`gb`/`gc`/`gd`/`gl`/`gpl`/`gps`):
+- `<leader>ga` (Git add %:p) — drop; staging via neogit's status buffer is more discoverable
+- `<leader>gb` (Git blame buffer) — replaced by `<leader>gB` (gitsigns inline, more useful)
+- `<leader>gc`, `<leader>gl`, `<leader>gp{l,s}` — same letters, now backed by neogit popups
+- `<leader>gd` (Git diff) — drop; `<leader>gv` (diffview) is the replacement
+- `<leader>gg` (open :Git) — same letter, now opens neogit status
 
 ### UI module
 
@@ -397,6 +420,7 @@ Single module exposing `snacks.nvim` with the following submodules in their own 
 
 - `nixvim-modules/coq-nvim/` — unused alternative to cmp.
 - `nixvim-modules/conform-nvim/` — formatter dispatcher dropped in favor of LSP / shell tooling.
+- `nixvim-modules/fugitive/` — entirely replaced by neogit + gitsigns + diffview + snacks.gitbrowse.
 - All `plugins.{bufferline,comment,chadtree,lightline,nvim-autopairs,vim-surround}.enable` lines from `nixvim-configurations/default.nix` — replaced by per-module configurations.
 - `plugins.treesitter-refactor.*` in `nixvim-modules/treesitter/default.nix` — archived upstream, hard-deps on nvim-treesitter-legacy.
 - `plugins.cmp.*` (nvim-cmp) — replaced by blink.cmp.
@@ -411,7 +435,7 @@ Single module exposing `snacks.nvim` with the following submodules in their own 
 The work lands in phases. Each phase lands as **one commit on `major-upgrade`** (so `git revert <sha>` is the rollback). After each phase: run `nix flake check`; launch `nix run .`; exercise the phase's keymaps from the checklist in that phase's done-criteria.
 
 1. **Unblock (~8 lines)** — drop `plugins.treesitter-refactor.*` (5 lines); rename `treesitter.folding = true` → `treesitter.folding.enable = true`; rewrite `treesitter.settings.highlight.enable` → `treesitter.highlight.enable`; delete the two stray `lsp.servers.rust_analyzer.*` lines (lines 41-42 of LSP module); bind `<leader>lr` to `vim.lsp.buf.rename` (replaces lost smartRename keymap). **Done:** `nix run .` succeeds with no eval errors or deprecation warnings. **Validation:** open a file, confirm syntax highlighting and folding still work.
-2. **Internal refactor (survivors only) — no behavior change** — restructure existing modules into mkMerge blocks with `# === name ===` + `# WHY:` intent comments. Move from `nixvim-configurations/default.nix` into per-concern modules only the plugins that survive the migration (i.e. fugitive, render-markdown, telescope etc.). **Skip moving** plugins slated for deletion in later phases (lightline, vim-surround, comment, nvim-autopairs, bufferline) — they get deleted in-place at their replacement phase rather than relocated then deleted. **Done:** `nix derivation show` diff before/after shows no functional change.
+2. **Internal refactor (survivors only) — no behavior change** — restructure existing modules into mkMerge blocks with `# === name ===` + `# WHY:` intent comments. Move from `nixvim-configurations/default.nix` into per-concern modules only the plugins that survive the migration (e.g. render-markdown, telescope). **Skip moving** plugins slated for deletion in later phases (lightline, vim-surround, comment, nvim-autopairs, bufferline, **fugitive**) — they get deleted in-place at their replacement phase rather than relocated then deleted. **Done:** `nix derivation show` diff before/after shows no functional change.
 3. **Which-key registry + `<leader>?` discovery** (was phase 11, moved up). Central key-group registry table + preset enablement + `delay = 200` + Telescope-builtin `<leader>?` bindings. **Land this BEFORE adding new plugins** so subsequent phases reference declared groups, not ad-hoc ones. **Done:** popping which-key shows the new prefix groups; `<leader>?k` opens telescope keymaps.
 4. **Drop conform + expand LSP servers** — remove conform-nvim module and its extraPackages. Add hls, neocmake, ansiblels, ts_ls, lua_ls, marksman, harper_ls (with the prose-only narrowing per §LSP). **Done:** every new LSP attaches when opening a file of its language.
 5. **Swap completion** — `plugins.cmp.*` → `plugins.blink-cmp.*` (first-class nixvim module — no extraPlugins). Wire luasnip + friendly-snippets + lazydev as blink sources. **Done:** completion menu pops in lua/python/nix files; cmdline `/` and `:` complete.
@@ -419,7 +443,7 @@ The work lands in phases. Each phase lands as **one commit on `major-upgrade`** 
 7. **Swap UI primitives** — lightline → lualine, bufferline → mini.tabline (via `plugins.mini.modules.tabline`). Add fidget (with `noice.lsp.progress.enabled = false`), noice, todo-comments, mini.indentscope, mini.icons (with mock_nvim_web_devicons + force-disable picker's web-devicons), nvim-origami, quicker.nvim, **trouble.nvim**. Keep render-markdown. **Done:** statusline renders; cmdline overlay works; trouble opens.
 8. **Swap editing primitives** — vim-surround → mini.surround, Comment.nvim → mini.comment (note: lose ts_context_commentstring for JSX/TSX — accept or add nvim-ts-context-commentstring), nvim-autopairs → mini.pairs. Add mini.ai, mini.move, flash, **harpoon (first-class) with package=harpoon2**, guess-indent, nvim-ts-autotag. **Done:** common editing motions work; flash `s` jumps; harpoon `<leader>ha` adds.
 9. **File explorer** — add `plugins.oil.enable = true;`; remove `plugins.chadtree.enable = false;` line. **Done:** `<leader>e` opens oil at buffer's directory.
-10. **Git enhancements** — add gitsigns, diffview (under `<leader>gv`, not `<leader>gd` per the keymap table), neogit. Keep fugitive. **Done:** gitsigns hunks in gutter; `:DiffviewOpen` works; `:Neogit` opens porcelain.
+10. **Git overhaul** — replace fugitive with neogit. Add gitsigns, diffview, neogit. Delete `plugins.fugitive` and its which-key entries from existing config. Wire the full 24-binding keymap layout from §Git. **Done:** `<leader>gg` opens neogit status; `<leader>gv` opens diffview; gitsigns hunks visible in gutter; old `:Git` commands no longer work (expected).
 11. **DAP + neotest** — add both modules with **first-class** nixvim options for dap-ui/dap-python/dap-virtual-text (no extraPlugins). Declare the `nixvimcfg.dap.pythonPath` cross-module option. **Must land DAP before or with neotest** (neotest python adapter reads dap.pythonPath). **Done:** breakpoint toggles, debug session starts for a Go and a Python file; `:Neotest` summary toggles.
 12. **Snacks adoption** — enable the 10 snacks submodules in order: bigfile, statuscolumn (with `folds.open = false`), quickfile, words (rebind `]]`/`[[` if treesitter-textobjects conflicts), toggle, bufdelete, rename, gitbrowse, scratch, profiler. **Done:** `<leader>o<delay>` shows toggle list; large file opens without lag.
 13. **Typst preview** — add typst-preview.nvim module. **Done:** preview start/stop works on a `.typ` file.
@@ -446,7 +470,7 @@ The work lands in phases. Each phase lands as **one commit on `major-upgrade`** 
 - **lazydev gap in nix-embedded Lua** — `extraConfigLua = ''…''` blocks inside `.nix` files don't trigger lua_ls/lazydev. Mitigation: extract large Lua into `.lua` files imported via `lib.fileContents`. For inline snippets, accept no completion.
 - **Format-on-save lost outside devShell** — dropping conform-nvim means a freshly-cloned repo with no `direnv allow` has no editor-side format-on-save for non-LSP-formatted languages. Accepted; user runs `direnv allow` or formats from shell.
 - **mini.modules vs standalone plugins.mini-* shape mismatch** — design uses the `plugins.mini.modules` shape exclusively. Spec verified that submodule type permits cross-file merging. Risk: if a future addition uses the standalone `plugins.mini-tabline` shape by mistake, mini.nvim could double-register. Catch in code review.
-- **`<leader>g` collisions** — addressed by moving diffview to `<leader>gv` and gitsigns hunks under `<leader>gh`. Verify after phase 10 that `<leader>gd` (fugitive diff) still works.
+- **`<leader>g` namespace** — restructured around neogit's popup-per-op model + gitsigns hunks + diffview. 24 bindings total per §Git. Verify after phase 10 that the muscle memory transition from fugitive's `<leader>g{a,b,c,d,l,pl,ps}` doesn't leave dangling reflexes — `<leader>gg`, `<leader>gc`, `<leader>gl`, `<leader>gp`/`<leader>gP` are preserved with new backends (neogit popups). `<leader>ga` (Git add %:p) is dropped — stage via neogit's status buffer instead.
 - **Telescope's web-devicons vs mini.icons** — addressed by `mini.icons.mock_nvim_web_devicons = true` + `plugins.web-devicons.enable = lib.mkForce false` in picker module. Verify after phase 7 that telescope/oil show correct icons.
 - **snacks.statuscolumn vs nvim-origami fold UI** — addressed by `statuscolumn.folds.open = false`. Verify after phase 12 that fold indicators render once, not twice.
 - **kanagawa colorscheme highlight gaps** — kanagawa may not define `MiniIndentscope*`, `RenderMarkdownH{1..6}Bg`, `Noice*` highlight groups. If sections render with default/jarring colors after phase 7/12, add a `colorscheme overrides` block setting `vim.api.nvim_set_hl` for the missing groups, or switch colorscheme (tokyonight, catppuccin both have explicit support).
