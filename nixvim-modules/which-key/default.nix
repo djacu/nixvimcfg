@@ -63,7 +63,6 @@ in
           { __unkeyed-1 = "<leader>o"; group = " Toggle"; }
           { __unkeyed-1 = "<leader>s"; group = " Search/Replace"; }
           { __unkeyed-1 = "<leader>t"; group = " Test"; }
-          { __unkeyed-1 = "<leader>w"; group = "WhichKey"; }
           { __unkeyed-1 = "<leader>x"; group = " Trouble"; }
         ];
       }
