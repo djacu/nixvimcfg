@@ -4,7 +4,7 @@
   inputs = {
     flake-parts.follows = "nixvim/flake-parts";
     nixpkgs.follows = "nixvim/nixpkgs";
-    nixvim.inputs.nuschtosSearch.follows = "";
+    # nixvim.inputs.nuschtosSearch.follows = "";
     nixvim.url = "github:nix-community/nixvim";
     systems.follows = "nixvim/systems";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
