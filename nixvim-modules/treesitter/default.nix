@@ -59,10 +59,120 @@ in
       # === treesitter-textobjects ===
       # WHY: structural motions (`af`/`if` etc.) for selecting / jumping
       # over functions, classes, parameters by syntax tree. main-branch
-      # version, first-class in nixvim. Note: keymaps are wired via
-      # Lua keymap API, not via configs.setup like the legacy version.
+      # version ships zero default keymaps — wire them via nixvim's
+      # keymap API. Bindings:
+      #   af/if   around/inside function (select)
+      #   ac/ic   around/inside class (select)
+      #   aa/ia   around/inside parameter (select)
+      #   ]f/[f   next/prev function start (move)
+      #   ]c/[c   next/prev class start (move)
       {
         plugins.treesitter-textobjects.enable = true;
+
+        keymaps = [
+          # --- selection (visual / operator-pending modes) ---
+          {
+            mode = [ "x" "o" ];
+            key = "af";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@function.outer', 'textobjects')
+              end
+            '';
+            options.desc = "around function";
+          }
+          {
+            mode = [ "x" "o" ];
+            key = "if";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@function.inner', 'textobjects')
+              end
+            '';
+            options.desc = "inside function";
+          }
+          {
+            mode = [ "x" "o" ];
+            key = "ac";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@class.outer', 'textobjects')
+              end
+            '';
+            options.desc = "around class";
+          }
+          {
+            mode = [ "x" "o" ];
+            key = "ic";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@class.inner', 'textobjects')
+              end
+            '';
+            options.desc = "inside class";
+          }
+          {
+            mode = [ "x" "o" ];
+            key = "aa";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@parameter.outer', 'textobjects')
+              end
+            '';
+            options.desc = "around parameter";
+          }
+          {
+            mode = [ "x" "o" ];
+            key = "ia";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.select').select_textobject('@parameter.inner', 'textobjects')
+              end
+            '';
+            options.desc = "inside parameter";
+          }
+          # --- movement (normal / visual / operator-pending) ---
+          {
+            mode = [ "n" "x" "o" ];
+            key = "]f";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.move').goto_next_start('@function.outer', 'textobjects')
+              end
+            '';
+            options.desc = "next function start";
+          }
+          {
+            mode = [ "n" "x" "o" ];
+            key = "[f";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.move').goto_previous_start('@function.outer', 'textobjects')
+              end
+            '';
+            options.desc = "prev function start";
+          }
+          {
+            mode = [ "n" "x" "o" ];
+            key = "]c";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.move').goto_next_start('@class.outer', 'textobjects')
+              end
+            '';
+            options.desc = "next class start";
+          }
+          {
+            mode = [ "n" "x" "o" ];
+            key = "[c";
+            action.__raw = ''
+              function()
+                require('nvim-treesitter-textobjects.move').goto_previous_start('@class.outer', 'textobjects')
+              end
+            '';
+            options.desc = "prev class start";
+          }
+        ];
       }
 
       # === treesitter-context ===
