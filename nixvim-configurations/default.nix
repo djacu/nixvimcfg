@@ -32,6 +32,7 @@ inputs: {
         nixvimcfg.navigation.enable = true;
         nixvimcfg.neotest.enable = true;
         nixvimcfg.picker.enable = true;
+        nixvimcfg.snacks.enable = true;
         nixvimcfg.treesitter.enable = true;
         nixvimcfg.ui.enable = true;
         nixvimcfg.which-key.enable = true;
