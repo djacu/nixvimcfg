@@ -29,7 +29,7 @@ inputs: {
         plugins.nvim-autopairs.enable = true;
         plugins.vim-surround.enable = true;
 
-        nixvimcfg.cmp.enable = true;
+        nixvimcfg.completion.enable = true;
         # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.fugitive.enable = true;
         nixvimcfg.lsp.enable = true;
