@@ -23,7 +23,6 @@ inputs: {
         colorschemes.kanagawa.enable = true;
 
         nixvimcfg.completion.enable = true;
-        # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.dap.enable = true;
         nixvimcfg.editing.enable = true;
         nixvimcfg.files.enable = true;
