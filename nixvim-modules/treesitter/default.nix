@@ -14,17 +14,55 @@ in
 
       # === treesitter core ===
       # WHY: the main-branch nvim-treesitter rewrite. Highlighting and
-      # folding configured via top-level options (not under settings.)
-      # which the new module routes through vim.treesitter.start /
-      # vim.treesitter.foldexpr.
+      # folding configured via top-level options.
+      # grammarPackages declares parsers at flake.lock time — replaces
+      # the legacy ensure_installed auto-install that no longer exists
+      # in the main-branch rewrite.
       {
         plugins.treesitter.enable = true;
         plugins.treesitter.highlight.enable = true;
         plugins.treesitter.folding.enable = true;
 
+        plugins.treesitter.grammarPackages = with config.plugins.treesitter.package.builtGrammars; [
+          astro
+          bash
+          c
+          cmake
+          cpp
+          css
+          go
+          haskell
+          html
+          javascript
+          json
+          lua
+          markdown
+          markdown_inline
+          nix
+          python
+          regex
+          rust
+          toml
+          tsx
+          typescript
+          typst
+          vim
+          vimdoc
+          yaml
+        ];
+
         extraConfigLua = ''
           vim.opt.foldenable = false
         '';
+      }
+
+      # === treesitter-textobjects ===
+      # WHY: structural motions (`af`/`if` etc.) for selecting / jumping
+      # over functions, classes, parameters by syntax tree. main-branch
+      # version, first-class in nixvim. Note: keymaps are wired via
+      # Lua keymap API, not via configs.setup like the legacy version.
+      {
+        plugins.treesitter-textobjects.enable = true;
       }
 
       # === treesitter-context ===
