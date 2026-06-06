@@ -22,10 +22,8 @@ inputs: {
 
         colorschemes.kanagawa.enable = true;
 
-        plugins.bufferline.enable = true;
         plugins.chadtree.enable = false;
         plugins.comment.enable = true;
-        plugins.lightline.enable = true;
         plugins.nvim-autopairs.enable = true;
         plugins.vim-surround.enable = true;
 
@@ -33,9 +31,9 @@ inputs: {
         # nixvimcfg.coq-nvim.enable = true;
         nixvimcfg.fugitive.enable = true;
         nixvimcfg.lsp.enable = true;
-        nixvimcfg.render-markdown.enable = true;
         nixvimcfg.picker.enable = true;
         nixvimcfg.treesitter.enable = true;
+        nixvimcfg.ui.enable = true;
         nixvimcfg.which-key.enable = true;
       };
     };
