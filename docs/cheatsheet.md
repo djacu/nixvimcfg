@@ -406,6 +406,7 @@ Unmerged / Recent commits are all collapsible "folds"):
 | `s` | Stage (file under cursor, or selected hunk) |
 | `u` | Unstage |
 | `x` | Discard (irreversible — confirms first) |
+| `n` | Intent-to-add (`git add -N`) — track an untracked file without staging its contents. Custom binding; not stock neogit. |
 | `<CR>` | Open the file (or expand the hunk) |
 | `<Tab>` | Toggle diff visibility for the file under cursor |
 

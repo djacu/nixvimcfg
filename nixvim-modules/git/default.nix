@@ -33,6 +33,42 @@ in
         plugins.neogit.settings.integrations.diffview = true;
       }
 
+      # === neogit-status `n` keymap: intent-to-add under cursor ===
+      # WHY: neogit has no built-in `git add -N` action. Bind `n` inside
+      # the status buffer so the user can mark an untracked file as
+      # intent-to-add (so gitsigns picks it up) without first opening
+      # the file. Reads the filename from the current line — relies on
+      # neogit's untracked section showing one path per line.
+      {
+        autoCmd = [
+          {
+            event = "FileType";
+            pattern = "NeogitStatus";
+            callback.__raw = ''
+              function(ev)
+                vim.keymap.set('n', 'n', function()
+                  local line = vim.api.nvim_get_current_line()
+                  local file = vim.trim(line)
+                  if vim.fn.empty(file) == 1 then
+                    vim.notify('No file on current line', vim.log.levels.WARN)
+                    return
+                  end
+                  local result = vim.fn.system({ 'git', 'add', '-N', file })
+                  if vim.v.shell_error ~= 0 then
+                    vim.notify('git add -N failed: ' .. result, vim.log.levels.ERROR)
+                    return
+                  end
+                  vim.notify('Intent-to-add: ' .. file)
+                  -- Refresh neogit so the file moves to Unstaged
+                  pcall(function() require('neogit').refresh() end)
+                  pcall(function() require('gitsigns').refresh() end)
+                end, { buffer = ev.buf, desc = 'Intent-to-add file under cursor' })
+              end
+            '';
+          }
+        ];
+      }
+
       # === which-key leaves: 24 git bindings ===
       # WHY: each plugin owns its slice — neogit popups, gitsigns hunks
       # under <leader>gh, diffview ops under <leader>gv/V/w.
