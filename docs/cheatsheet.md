@@ -123,6 +123,7 @@ Inside the blame buffer:
 | `<leader>ghu` | Undo stage hunk |
 | `<leader>ghd` | Diff vs index |
 | `<leader>gho` | Open in GitHub (snacks.gitbrowse) |
+| `<leader>gn` | Intent-to-add current file (`git add -N`) — track without staging contents |
 
 **Diff browser (diffview):**
 

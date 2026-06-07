@@ -53,6 +53,29 @@ in
           { __unkeyed-1 = "<leader>gx"; __unkeyed-2 = "<cmd>Neogit cherry_pick<cr>"; desc = "Cherry-pick"; }
           { __unkeyed-1 = "<leader>gz"; __unkeyed-2 = "<cmd>Neogit reset<cr>"; desc = "Reset"; }
           { __unkeyed-1 = "<leader>gl"; __unkeyed-2 = "<cmd>Neogit log<cr>"; desc = "Log"; }
+          # intent-to-add: track the current file without staging contents.
+          # Useful so gitsigns starts rendering hunk signs for new files
+          # without committing yet. (Neogit has no built-in equivalent.)
+          {
+            __unkeyed-1 = "<leader>gn";
+            __unkeyed-2.__raw = ''
+              function()
+                local file = vim.fn.expand('%:p')
+                if vim.fn.empty(file) == 1 then
+                  vim.notify('No file in current buffer', vim.log.levels.WARN)
+                  return
+                end
+                local result = vim.fn.system({ 'git', 'add', '-N', file })
+                if vim.v.shell_error ~= 0 then
+                  vim.notify('git add -N failed: ' .. result, vim.log.levels.ERROR)
+                  return
+                end
+                vim.notify('Intent-to-add: ' .. vim.fn.expand('%:.'))
+                pcall(function() require('gitsigns').refresh() end)
+              end
+            '';
+            desc = "Intent-to-add (git add -N)";
+          }
           # diffview
           { __unkeyed-1 = "<leader>gv"; __unkeyed-2 = "<cmd>DiffviewOpen<cr>"; desc = "Diffview open"; }
           { __unkeyed-1 = "<leader>gV"; __unkeyed-2 = "<cmd>DiffviewClose<cr>"; desc = "Diffview close"; }
