@@ -315,13 +315,80 @@ Three renames, one save, atomic.
 
 ---
 
-## Detailed: neogit status buffer
+## Detailed: harpoon
 
-After `<leader>gg`, you're in neogit's status view. The sections (Untracked /
-Unstaged / Staged / Stashes / Unpulled / Unmerged / Recent commits) are
-collapsible "folds."
+**Mental model:** "pinned files you teleport between." Mark 1–4 files you're
+actively working in; jump between them with single keystrokes. Beats
+bufferline cycling when you're rotating between 2–3 known files (e.g.
+test + impl + spec).
 
-### Toggling sections
+### Workflow
+
+1. Open the file you want to mark.
+2. Press **`<leader>ha`** to add it to the harpoon list. Silent — no confirmation.
+3. Repeat in 2–3 other files you'll bounce between.
+4. Jump between them with **`<leader>h1`**, **`<leader>h2`**, **`<leader>h3`**,
+   **`<leader>h4`** — instant teleport, no fuzzy search.
+5. **`<leader>hn`** / **`<leader>hp`** cycle forward/back through the list
+   (useful if you forget which slot is which).
+
+### Managing the list
+
+Press **`<leader>hh`** to open the harpoon quick menu. This is a small floating
+buffer showing your marks, one per line. You can:
+
+- Reorder marks by moving lines (`dd`/`p` to swap)
+- Delete marks by deleting their lines (`dd`)
+- Add a new mark by typing its path on a new line (relative to project root)
+- Press `<CR>` on a line to jump to that file
+- `:q` to close the menu — changes are saved on close
+
+### When harpoon shines vs telescope
+
+- **Telescope** (`<leader>ff`/`<leader>fl`): when you don't know where the file
+  is, or it's a one-off lookup.
+- **Harpoon**: when you'll touch a specific small set of files repeatedly over
+  the next hour. Mark them once, teleport for the rest of the session.
+
+### Tip
+
+Harpoon's list is per-project (keyed by cwd). Switching to a different repo
+gives you a fresh list. The list persists across nvim restarts.
+
+---
+
+## Detailed: neogit
+
+**Mental model:** Magit-style — the status view *is* the workspace. You
+stage/unstage/commit/push by pressing single keys on items in the status
+buffer, not by typing `:Git ...` commands.
+
+### Typical edit-stage-commit-push session
+
+1. **`<leader>gg`** — opens status. You see sections: Untracked, Unstaged,
+   Staged, etc. (folded by default; `<Tab>` to expand a section).
+2. **Move cursor to a file** in "Unstaged" or "Untracked". Press **`s`** to
+   stage it. The file moves to the "Staged" section.
+3. **Or stage a single hunk**: with cursor on a file, press **`<Tab>`** to
+   expand its diff. Cursor onto a hunk, press **`s`**. Just that hunk stages.
+4. **Made a mistake?** **`u`** unstages (file or hunk under cursor). **`x`**
+   discards (irreversible — it asks first).
+5. **Commit**: press **`c`** to open the commit popup. The popup shows a menu
+   of commit variants:
+   - `c` again → normal commit
+   - `a` → amend the last commit
+   - `e` → extend (amend without changing the message)
+   - `f` → fixup
+6. Press your choice. A commit buffer opens. Type your message. Press
+   **`<C-c><C-c>`** to confirm (or `<C-c><C-k>` to abort).
+7. **Push**: back in status (you'll auto-return), press **`p`** for push popup.
+   Then **`p`** again to push to upstream. (Capital letters do force-push
+   variants — see the popup.)
+
+### Status-buffer keymap reference
+
+**Toggling sections** (Untracked / Unstaged / Staged / Stashes / Unpulled /
+Unmerged / Recent commits are all collapsible "folds"):
 
 | Key | What |
 |---|---|
@@ -331,7 +398,7 @@ collapsible "folds."
 | `<C-n>` | Jump to next section |
 | `<C-p>` | Jump to previous section |
 
-### Acting on the file or hunk under cursor
+**Acting on the file or hunk under cursor:**
 
 | Key | What |
 |---|---|
@@ -341,7 +408,7 @@ collapsible "folds."
 | `<CR>` | Open the file (or expand the hunk) |
 | `<Tab>` | Toggle diff visibility for the file under cursor |
 
-### Popups
+**Popups** (all from the status buffer; they open menus of related actions):
 
 | Key | What |
 |---|---|
@@ -357,7 +424,8 @@ collapsible "folds."
 | `?` | Help popup (lists everything available — your in-buffer cheatsheet) |
 
 **Tip:** `?` is the magit-style help — it surfaces every popup and every
-action available in the current view. Use it instead of trying to remember.
+action available in the current view. Use it instead of trying to memorize
+the popups.
 
 ### Closing
 
@@ -365,3 +433,29 @@ action available in the current view. Use it instead of trying to remember.
 |---|---|
 | `q` | Close neogit |
 | `:q` | Also works |
+
+### Worked example: stage one hunk + commit
+
+```
+1. <leader>gg              open neogit
+2. <Tab> on a file         expand diff
+3. j j j (cursor onto hunk)
+4. s                       stage just that hunk
+5. c                       open commit popup
+6. c                       confirm "commit"
+7. (type message)
+8. <C-c><C-c>              save & commit
+```
+
+Six keystrokes after navigation. Try doing that in fugitive.
+
+### When neogit vs gitsigns
+
+- **Gitsigns** (`<leader>gh*`): single-file, in-place hunk operations while
+  you're editing. You don't leave your file — stage/reset/preview from the
+  gutter signs without context-switching.
+- **Neogit**: whole-repo workflow. Reviewing all changes, building up a commit
+  across multiple files, branch management, complex rebases.
+
+You'll use both in the same session — gitsigns for quick "ship this one hunk"
+moves, neogit for "let me review and craft a real commit."
