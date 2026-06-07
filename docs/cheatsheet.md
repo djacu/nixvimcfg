@@ -231,3 +231,137 @@ Memorize these and you'll get through most days:
 3. **`<leader>fl`** — live grep
 4. **`<leader>gg`** — open neogit
 5. **`zR`** — open all folds in buffer
+
+---
+
+## Detailed: oil.nvim (file explorer)
+
+Oil treats a directory as a normal Neovim buffer. Each line is a file or
+subdirectory name. You navigate with regular vim motions, **edit the buffer
+to make filesystem changes**, then `:w` to apply them. Renames, creates,
+deletes, even moves between directories — all become text edits.
+
+### Opening
+
+| Key / cmd | What |
+|---|---|
+| `<leader>e` | Open oil at the current buffer's directory |
+| `:Oil` | Same as above |
+| `:Oil /some/path` | Open oil at a specific path |
+| `:Oil --float` | Open in a floating window |
+
+### Navigating inside the oil buffer
+
+| Key | What |
+|---|---|
+| `<CR>` | Open the file/directory under cursor (replaces current window) |
+| `-` | Go up one directory |
+| `_` | Open oil at your cwd |
+| `<C-s>` | Open in vertical split |
+| `<C-h>` | Open in horizontal split |
+| `<C-t>` | Open in new tab |
+| `<C-p>` | Preview the file (no open) |
+| `<C-l>` | Refresh the listing |
+| `g.` | Toggle showing hidden files (dotfiles) |
+| `g\` | Toggle trash view |
+| `gs` | Change sort order |
+| `gx` | Open with the system handler (e.g. an image in your image viewer) |
+| `g?` | Show oil's help inside the buffer |
+| `<C-c>` | Close the oil buffer |
+
+### Filesystem operations — edit the buffer, then `:w`
+
+This is the part that feels strange at first but becomes second nature:
+
+| Operation | How |
+|---|---|
+| **Create a file** | Add a new line with the filename. `:w` creates it (empty). |
+| **Create a directory** | Add a new line ending in `/` (e.g. `newdir/`). `:w` creates it. |
+| **Rename** | Edit the filename in place. `:w` renames. |
+| **Delete** | Delete the line (`dd`). `:w` deletes the file. |
+| **Move (single file)** | `dd` to cut the line, navigate to the destination oil buffer, `p` to paste, `:w`. |
+| **Copy** | Yank the line (`yy`), navigate to the destination, `p`, `:w`. To copy in place under a new name, `yy` then `p` then edit the duplicate filename. |
+| **Bulk rename** | Use any normal vim editing — `:%s/\.txt$/.md/`, visual block edit, macros, etc. `:w` applies all renames atomically. |
+
+**Important:** changes are not applied until `:w`. Before saving, oil shows
+you a confirmation prompt listing every CREATE/DELETE/RENAME/MOVE/COPY it's
+about to execute. Hit `y` to confirm, `n` to abort, `Esc` to cancel and keep
+editing.
+
+### Tips
+
+- **`g?` is your friend** — it shows the in-buffer help with every keymap.
+- **Oil and harpoon play well together** — open oil with `<leader>e`, `<CR>`
+  into a file, `<leader>ha` to mark it.
+- **Yanking files across the system**: `yy` in one oil buffer, open oil
+  somewhere else (`:Oil /target/path`), `p`, `:w`. Cross-directory move/copy
+  in two motions.
+- **No undo for the filesystem**: once you `:w`, the operation runs. Use the
+  confirmation prompt as your safety net. The `g\` trash view shows
+  recently-deleted entries if trash mode is configured.
+
+### Walkthrough: renaming three test files
+
+```
+1. <leader>e             open oil in current dir
+2. /test_                find first test file
+3. cgn                   change next match, type new name
+4. .                     repeat for next match (or use n + cgn)
+5. (repeat)
+6. :w                    see confirmation, hit y to apply
+```
+
+Three renames, one save, atomic.
+
+---
+
+## Detailed: neogit status buffer
+
+After `<leader>gg`, you're in neogit's status view. The sections (Untracked /
+Unstaged / Staged / Stashes / Unpulled / Unmerged / Recent commits) are
+collapsible "folds."
+
+### Toggling sections
+
+| Key | What |
+|---|---|
+| `<Tab>` | Toggle the section under cursor (open ↔ closed) |
+| `za` | Same as `<Tab>` |
+| `zo` | Open fold explicitly |
+| `<C-n>` | Jump to next section |
+| `<C-p>` | Jump to previous section |
+
+### Acting on the file or hunk under cursor
+
+| Key | What |
+|---|---|
+| `s` | Stage (file under cursor, or selected hunk) |
+| `u` | Unstage |
+| `x` | Discard (irreversible — confirms first) |
+| `<CR>` | Open the file (or expand the hunk) |
+| `<Tab>` | Toggle diff visibility for the file under cursor |
+
+### Popups
+
+| Key | What |
+|---|---|
+| `c` | Commit popup |
+| `p` | Push popup |
+| `F` | Pull popup (note: capital — `<leader>gP` from outside also works) |
+| `f` | Fetch popup |
+| `b` | Branch popup |
+| `m` | Merge popup |
+| `r` | Rebase popup |
+| `Z` | Stash popup |
+| `l` | Log popup |
+| `?` | Help popup (lists everything available — your in-buffer cheatsheet) |
+
+**Tip:** `?` is the magit-style help — it surfaces every popup and every
+action available in the current view. Use it instead of trying to remember.
+
+### Closing
+
+| Key | What |
+|---|---|
+| `q` | Close neogit |
+| `:q` | Also works |
