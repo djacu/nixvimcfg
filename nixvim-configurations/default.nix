@@ -22,21 +22,19 @@ inputs: {
 
         colorschemes.kanagawa.enable = true;
 
-        plugins.bufferline.enable = true;
-        plugins.chadtree.enable = false;
-        plugins.comment.enable = true;
-        plugins.lightline.enable = true;
-        plugins.nvim-autopairs.enable = true;
-        plugins.vim-surround.enable = true;
-
-        nixvimcfg.cmp.enable = true;
-        nixvimcfg.conform-nvim.enable = true;
-        # nixvimcfg.coq-nvim.enable = true;
-        nixvimcfg.fugitive.enable = true;
+        nixvimcfg.completion.enable = true;
+        nixvimcfg.dap.enable = true;
+        nixvimcfg.editing.enable = true;
+        nixvimcfg.files.enable = true;
+        nixvimcfg.git.enable = true;
         nixvimcfg.lsp.enable = true;
-        nixvimcfg.render-markdown.enable = true;
-        nixvimcfg.telescope.enable = true;
+        nixvimcfg.navigation.enable = true;
+        nixvimcfg.neotest.enable = true;
+        nixvimcfg.picker.enable = true;
+        nixvimcfg.snacks.enable = true;
         nixvimcfg.treesitter.enable = true;
+        nixvimcfg.typst.enable = true;
+        nixvimcfg.ui.enable = true;
         nixvimcfg.which-key.enable = true;
       };
     };
