@@ -187,6 +187,12 @@ in
           }
           {
             mode = "n";
+            key = "<leader>lf";
+            action.__raw = "function() vim.lsp.buf.format() end";
+            options.desc = "Format buffer";
+          }
+          {
+            mode = "n";
             key = "<leader>lk";
             action.__raw = "function() vim.lsp.buf.hover() end";
             options.desc = "Hover docs";
