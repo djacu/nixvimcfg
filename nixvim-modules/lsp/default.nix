@@ -17,6 +17,15 @@ in
       # WHY: the nvim-lsp plugin itself, with per-server enables below.
       { plugins.lsp.enable = true; }
 
+      # === diagnostic display ===
+      # WHY: neovim's default only shows diagnostics as gutter signs +
+      # underline (virtual_text off), so the message stays hidden until
+      # you hover. Turn on virtual_text so the message shows inline at
+      # end of line. If it feels noisy under basedpyright's strict mode,
+      # swap to `virtual_lines = { current_line = true; }` for the full
+      # message on just the cursor's line instead.
+      { diagnostic.settings.virtual_text = true; }
+
       # === web ===
       # WHY: front-end stack — astro file framework, eslint linter,
       # CSS, HTML, tailwind classes.
