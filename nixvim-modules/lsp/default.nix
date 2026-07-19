@@ -156,10 +156,30 @@ in
       }
 
       # === <leader>l LSP keymap leaves ===
-      # WHY: lsp module owns <leader>l prefix; smartRename from
-      # treesitter-refactor is now provided by vim.lsp.buf.rename.
+      # WHY: lsp module owns <leader>l prefix. These mirror Neovim 0.11's
+      # built-in LSP maps (gra/K/grn) under a discoverable which-key
+      # group so they surface when you press <leader>l. The built-ins
+      # still work; these are the labelled equivalents.
       {
         keymaps = [
+          {
+            mode = [ "n" "x" ];
+            key = "<leader>la";
+            action.__raw = "function() vim.lsp.buf.code_action() end";
+            options.desc = "Code action / quick fix";
+          }
+          {
+            mode = "n";
+            key = "<leader>ld";
+            action.__raw = "function() vim.diagnostic.open_float() end";
+            options.desc = "Line diagnostics";
+          }
+          {
+            mode = "n";
+            key = "<leader>lk";
+            action.__raw = "function() vim.lsp.buf.hover() end";
+            options.desc = "Hover docs";
+          }
           {
             mode = "n";
             key = "<leader>lr";
