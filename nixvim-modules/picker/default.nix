@@ -42,6 +42,12 @@ in
       # WHY: faster matcher (C implementation) for large repos.
       { plugins.telescope.extensions.fzf-native.enable = true; }
 
+      # === extension: ui-select ===
+      # WHY: routes vim.ui.select (LSP code actions, etc.) through a
+      # telescope dropdown navigated with j/k + <Enter>, replacing
+      # neovim's plain "type a number" prompt.
+      { plugins.telescope.extensions.ui-select.enable = true; }
+
       # === extension: media-files ===
       # WHY: preview images/PDFs/videos inside telescope. Requires
       # poppler-utils (PDF), imagemagick (image conv), ffmpegthumbnailer
