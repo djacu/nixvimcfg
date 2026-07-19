@@ -57,8 +57,17 @@ in
       }
 
       # === Python ===
-      # WHY: ruff is the modern combined linter/formatter for Python.
-      { plugins.lsp.servers.ruff.enable = true; }
+      # WHY: ruff is the modern combined linter/formatter for Python;
+      # basedpyright is the type-checker + navigation/hover LSP that ruff
+      # doesn't provide. basedpyright is a fork of Microsoft's pyright
+      # that re-implements the LSP features pyright reserves for the
+      # proprietary Pylance extension (inlay hints, semantic tokens,
+      # import code-actions, go-to-implementation), so they work in nvim.
+      # Swap to plugins.lsp.servers.pyright if you want Microsoft's build.
+      {
+        plugins.lsp.servers.ruff.enable = true;
+        plugins.lsp.servers.basedpyright.enable = true;
+      }
 
       # === Nix ===
       # WHY: nixd for options completion and evaluation-based features.
