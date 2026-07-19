@@ -182,6 +182,10 @@ in
       {
         plugins.treesitter-context.enable = true;
         plugins.treesitter-context.settings.trim_scope = "outer";
+        # Cap the sticky context at 5 lines; the plugin default is 0
+        # (unlimited), which stacks deeply-nested scopes and crowds the
+        # top of the window.
+        plugins.treesitter-context.settings.max_lines = 5;
       }
 
       # === which-key leaves under <leader>t ===
