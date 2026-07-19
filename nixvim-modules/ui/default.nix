@@ -69,7 +69,23 @@ in
       # WHY: LSP-aware folding (with treesitter fallback). Lighter
       # replacement for nvim-ufo. The README explicitly says it provides
       # folding, not just decoration.
-      { plugins.origami.enable = true; }
+      # All three of origami's auto-behaviors disabled so files open
+      # UNfolded and stay that way until you fold manually (za/zc):
+      #   - autoFold: closed comments/imports on file open.
+      #   - foldKeymaps: remapped h/l/^/$ to fold navigation.
+      #   - pauseFoldsOnSearch: an on_key handler that ASSUMES
+      #     foldenable=true. With our vim.opt.foldenable = false it
+      #     misreads the state as "paused by a search" and flips
+      #     foldenable back on at the first keystroke, refolding the file.
+      # Kept: LSP-preferred foldexpr + nicer foldtext for when you do fold.
+      {
+        plugins.origami.enable = true;
+        plugins.origami.settings = {
+          autoFold.enabled = false;
+          foldKeymaps.setup = false;
+          pauseFoldsOnSearch = false;
+        };
+      }
 
       # === quicker.nvim ===
       # WHY: editable quickfix buffer UI; modern replacement for the
