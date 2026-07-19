@@ -56,13 +56,24 @@ in
       }
 
       # === Rust ===
-      # WHY: rust-analyzer with bundled cargo/rustc/rustfmt so the editor
-      # is self-contained.
+      # WHY: rust-analyzer, but toolchain-agnostic. packageFallback moves
+      # the bundled rust-analyzer + cargo/rustc/rustfmt to the END of PATH
+      # (suffix), so each repo's own toolchain (devshell / rustup) — and
+      # its matching clippy version — takes precedence; the nixvim-pinned
+      # toolchain is only a fallback when editing outside a Rust project.
+      # check.command = "clippy" makes rust-analyzer lint with clippy
+      # instead of plain `cargo check`. clippy is intentionally NOT bundled
+      # so its version always matches whichever toolchain the repo provides
+      # (clippy is version-locked to its rustc).
+      # NOTE: launch nvim from inside the repo's environment (direnv /
+      # nix develop / rustup shims) so that toolchain is on PATH.
       {
         plugins.lsp.servers.rust_analyzer.enable = true;
         plugins.lsp.servers.rust_analyzer.installCargo = true;
         plugins.lsp.servers.rust_analyzer.installRustc = true;
         plugins.lsp.servers.rust_analyzer.installRustfmt = true;
+        plugins.lsp.servers.rust_analyzer.packageFallback = true;
+        plugins.lsp.servers.rust_analyzer.settings.check.command = "clippy";
       }
 
       # === Python ===
