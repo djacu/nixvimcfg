@@ -29,10 +29,19 @@ in
       # === web ===
       # WHY: front-end stack — astro file framework, eslint linter,
       # CSS, HTML, tailwind classes.
+      # NOTE: eslint.packageFallback expresses "prefer the repo's eslint
+      # server", but eslint/cssls/html/jsonls all share the
+      # vscode-langservers-extracted package; since those siblings stay
+      # bundled (PATH prefix), the shared binary still resolves to the
+      # pinned copy. Harmless — the eslint LSP lints with the project's
+      # own eslint from node_modules regardless, so the eslint *engine*
+      # version is already repo-driven. Flip cssls/html/jsonls too if you
+      # ever want the shared server binary itself to be env-first.
       {
         plugins.lsp.servers.astro.enable = true;
         plugins.lsp.servers.cssls.enable = true;
         plugins.lsp.servers.eslint.enable = true;
+        plugins.lsp.servers.eslint.packageFallback = true;
         plugins.lsp.servers.html.enable = true;
         plugins.lsp.servers.tailwindcss.enable = true;
       }
@@ -43,16 +52,22 @@ in
         plugins.lsp.servers.bashls.enable = true;
         plugins.lsp.servers.jsonls.enable = true;
         plugins.lsp.servers.taplo.enable = true;   # TOML
+        plugins.lsp.servers.taplo.packageFallback = true;
         plugins.lsp.servers.yamlls.enable = true;
       }
 
       # === Go ===
-      # WHY: gopls + golangci-lint LSP. golangci-lint binary is bundled
-      # via extraPackages because golangci_lint_ls invokes it as a CLI.
+      # WHY: gopls + golangci-lint LSP, preferring the repo's own toolchain.
+      # packageFallback moves the bundled servers to the end of PATH, and
+      # golangci-lint (which golangci_lint_ls invokes as a CLI) is supplied
+      # via extraPackagesAfter (also a suffix), so a devShell's version
+      # wins; the pinned versions are only fallbacks outside a Go project.
       {
         plugins.lsp.servers.gopls.enable = true;
+        plugins.lsp.servers.gopls.packageFallback = true;
         plugins.lsp.servers.golangci_lint_ls.enable = true;
-        extraPackages = [ pkgs.golangci-lint ];
+        plugins.lsp.servers.golangci_lint_ls.packageFallback = true;
+        extraPackagesAfter = [ pkgs.golangci-lint ];
       }
 
       # === Rust ===
@@ -86,6 +101,7 @@ in
       # Swap to plugins.lsp.servers.pyright if you want Microsoft's build.
       {
         plugins.lsp.servers.ruff.enable = true;
+        plugins.lsp.servers.ruff.packageFallback = true;
         plugins.lsp.servers.basedpyright.enable = true;
       }
 
@@ -131,7 +147,10 @@ in
       # === TypeScript / JavaScript ===
       # WHY: gap in current setup — eslint LSP is a linter, not a
       # navigation/hover language server. ts_ls covers plain .ts/.tsx/.js.
-      { plugins.lsp.servers.ts_ls.enable = true; }
+      {
+        plugins.lsp.servers.ts_ls.enable = true;
+        plugins.lsp.servers.ts_ls.packageFallback = true;
+      }
 
       # === Lua ===
       # WHY: lua_ls + lazydev for completion when editing inline Lua.
