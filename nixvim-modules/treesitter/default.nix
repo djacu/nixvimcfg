@@ -194,7 +194,7 @@ in
         plugins.which-key.settings.spec = [
           {
             __unkeyed-1 = "<leader>oc";
-            __unkeyed-2 = "<cmd>TSContextToggle<cr>";
+            __unkeyed-2 = "<cmd>TSContext toggle<cr>";
             desc = "TS Context Toggle";
           }
         ];
