@@ -185,6 +185,32 @@ in
         };
       }
 
+      # === conform (formatter framework) ===
+      # WHY: LSP servers cover formatting for most languages, but markdown
+      # and MDX have no LSP formatter. conform runs prettier for those —
+      # prettier is the only common formatter that handles MDX at all
+      # (dprint/mdformat are CommonMark-only). conform resolves prettier
+      # from the repo's node_modules first, then PATH, so each project's
+      # own prettier (and its MDX/plugin setup) is used; the nixpkgs
+      # prettier bundled via extraPackagesAfter (PATH suffix) is only a
+      # last-resort fallback (covers MDX v1 out of the box).
+      # .astro is intentionally NOT routed here — it's left to the astro
+      # LSP, which formats via the project's prettier-plugin-astro; the
+      # bundled prettier lacks that plugin.
+      {
+        plugins.conform-nvim.enable = true;
+        plugins.conform-nvim.settings.formatters_by_ft = {
+          markdown = [ "prettier" ];
+          mdx = [ "prettier" ];
+        };
+        # neovim guesses .mdx as `conf`, so conform never matched it. Map
+        # .mdx to the compound `markdown.mdx`: markdown tooling still fires
+        # (compound FileType events) and conform — which splits compound
+        # filetypes on "." — matches the mdx/markdown keys.
+        filetype.extension.mdx = "markdown.mdx";
+        extraPackagesAfter = [ pkgs.prettier ];
+      }
+
       # === <leader>l LSP keymap leaves ===
       # WHY: lsp module owns <leader>l prefix. These mirror Neovim 0.11's
       # built-in LSP maps (gra/K/grn) under a discoverable which-key
@@ -207,7 +233,9 @@ in
           {
             mode = "n";
             key = "<leader>lf";
-            action.__raw = "function() vim.lsp.buf.format() end";
+            # conform for md/mdx (prettier); LSP formatter (ruff, rustfmt,
+            # taplo, …) for every other filetype via the fallback.
+            action.__raw = "function() require('conform').format({ lsp_format = 'fallback' }) end";
             options.desc = "Format buffer";
           }
           {
